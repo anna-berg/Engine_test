@@ -1,6 +1,7 @@
 package com.berg.services;
 
-import au.com.bytecode.opencsv.CSVReader;
+
+import com.opencsv.CSVReader;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,29 +9,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DepartmentCreator {
-    TableHeaderParcer tableHeaderParcer;
+    TableHeaderParser tableHeaderParser;
 
-    public DepartmentCreator(TableHeaderParcer tableHeaderParcer) {
-        this.tableHeaderParcer = tableHeaderParcer;
+    public DepartmentCreator(TableHeaderParser tableHeaderParser) {
+        this.tableHeaderParser = tableHeaderParser;
     }
-
+//  read the csv and put it into a map
     public Map<Integer, String> departmentMap(String filePath) throws IOException {
 
-        var csvReader1 = new CSVReader(new FileReader(filePath),
+        CSVReader csvReader1 = new CSVReader(new FileReader(filePath),
                 ';', '"', 0);
-        String [] depLine;
+        String [] departmentLine;
         Map<Integer, String> depMap = new HashMap<>();
         boolean isFirstRow = true;
         Map <String, Integer> departmentIndexMap = new HashMap<>();
-        while ((depLine = csvReader1.readNext()) != null){
+        while ((departmentLine = csvReader1.readNext()) != null){
             if (isFirstRow){
-                departmentIndexMap = tableHeaderParcer.firstColumnValidation(depLine);
+                departmentIndexMap = tableHeaderParser.firstColumnIndexing(departmentLine);
                 isFirstRow = false;
                 continue;
             }
             var id = departmentIndexMap.get("id");
             var department = departmentIndexMap.get("name");
-            depMap.put(Integer.valueOf(depLine[id]), depLine[department]);
+            depMap.put(Integer.valueOf(departmentLine[id]), departmentLine[department]);
         }
         return depMap;
     }

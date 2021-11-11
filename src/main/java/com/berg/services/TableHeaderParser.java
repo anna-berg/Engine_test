@@ -3,8 +3,9 @@ package com.berg.services;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TableHeaderParcer {
-    public Map<String, Integer> firstColumnValidation(String[] tableFirstLine) {
+public class TableHeaderParser {
+
+    public Map<String, Integer> firstColumnIndexing(String[] tableFirstLine) {
         Map <String, Integer> tableIndex = new HashMap<>();
 
         for (int i = 0; i < tableFirstLine.length; i++) {

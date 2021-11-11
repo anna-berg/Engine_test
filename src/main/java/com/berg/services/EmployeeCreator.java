@@ -1,6 +1,6 @@
 package com.berg.services;
 
-import au.com.bytecode.opencsv.CSVReader;
+import com.opencsv.CSVReader;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,15 +8,15 @@ import java.util.Map;
 
 public class EmployeeCreator {
     Writer writer;
-    TableHeaderParcer tableHeaderParcer;
+    TableHeaderParser tableHeaderParser;
 
-    public EmployeeCreator(Writer writer, TableHeaderParcer tableHeaderParcer) {
+    public EmployeeCreator(Writer writer, TableHeaderParser tableHeaderParcer) {
         this.writer = writer;
-        this.tableHeaderParcer = tableHeaderParcer;
+        this.tableHeaderParser = tableHeaderParcer;
     }
 
     public void createEmployee(Map<Integer, String> depMap, String employeeFilePath) throws IOException {
-        var csvReader = new CSVReader(new FileReader(employeeFilePath),
+        CSVReader csvReader = new CSVReader(new FileReader(employeeFilePath),
                 ';', '"', 0);
         String[] employeeLine;
         boolean isFirstRow = true;
@@ -24,10 +24,12 @@ public class EmployeeCreator {
             String dep = null;
 
             if (isFirstRow){
-                tableHeaderParcer.firstColumnValidation(employeeLine);
+                tableHeaderParser.firstColumnIndexing(employeeLine);
                 isFirstRow = false;
                 continue;
             }
+
+//          compare Map of department id and department name with department id column in parsing table
             for (Map.Entry<Integer, String> entry: depMap.entrySet()) {
                 if (entry.getKey().equals(Integer.valueOf(employeeLine[3]))){
                     dep = entry.getValue();
